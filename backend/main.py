@@ -1,13 +1,20 @@
 from fastapi import FastAPI, Body
 from base64 import b64encode, b64decode
 import joblib
-
+from fastapi.middleware.cors import CORSMiddleware  # <- import this
+#from fastapi.staticfiles import StaticFiles
 
 from crypto_utils import sign_content, verify_signature, export_public_key
 #from predict import predict_fake_news
 
 app = FastAPI(title="News Trust Backend")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all origins (for testing)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Load model & vectorizer once
 model = joblib.load("model.pkl")
